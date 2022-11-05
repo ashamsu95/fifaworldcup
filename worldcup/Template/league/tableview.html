@@ -1,0 +1,21 @@
+{% extends 'base.html'%} {% load static %} {% block Body_block %}
+
+<div class="tablebox">
+  <table class="tablebox_head">
+    <tr class="tablename">
+      <th>Rank</th>
+      <th>User</th>
+      <th>Points</th>
+    </tr>
+    <tbody class="tablebody">
+      {%for u in userrank %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{u.user.username}}</td>
+        <td>{{u.point}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

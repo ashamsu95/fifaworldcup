@@ -1,0 +1,55 @@
+{% extends 'user_base.html'%} {% load static %} {% block Body_block %}
+<div class="d-flex justify-content-center"
+style="margin-top: 2rem;">
+<div class="card mb-3 logincard" style="max-width: 540px">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="https://crests.football-data.org/qatar.png" 
+      class=" img-fluid rounded-start loginlogo" 
+      alt="..." 
+      style = "
+	  height: 86%;
+	  margin: 1rem 1rem;
+	  padding-right: 1rem;"/>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <p class="card-text">
+          <form method="post">
+            {% for message in messages %}
+            <div class="alert alert-success">
+              <a class="close" href="#" data-dismiss="alert">×</a>
+              {{ message }}
+            </div>
+            {% endfor %}
+            <div class="illustration"
+            style="text-align: center;">
+              <h1>
+                Login&nbsp;<i
+                  class="icon ion-log-in"
+                  style="color: rgb(244, 71, 107)"
+                ></i>
+              </h1>
+            </div>
+            {% csrf_token %} 
+            {{ form.as_p }}
+            <div class="form-group " style="text-align: center;">
+              <button
+                class="btn btn-primary btn-block"
+                type="submit"
+                style="color: rgb(255, 255, 255)"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+        </p>
+        <p class="card-text " style="text-align: center;">
+          <small class="text-muted">Jai nepal</small>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{%endblock %}

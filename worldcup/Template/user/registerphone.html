@@ -1,0 +1,33 @@
+{% extends 'user_base.html'%} {% load static %} {% block Body_block %}
+<div class="d-flex justify-content-center">
+  <div class="mb-3" style="width: 45rem; margin-top: 2rem">
+    <div class="row register-form">
+      <div class="col-md-8 offset-md-2">
+        <form class="custom-form" method="POST">
+          {% csrf_token %}
+          <h1>User Phone Number Registration</h1>
+          {{ form.non_field_errors }}
+          <div class="form-row form-group">
+            <div class="col-md-8 label-column">
+              {{ form.phone_number.errors }}<label
+                class="col-form-label"
+                for="{{ form.phone_number.id_for_label }}"
+                >Phone Number
+              </label>
+            </div>
+            <div class="col-md-8 input-column">{{form.phone_number}}</div>
+          </div>
+
+          <button
+            class="mt-3 btn submit-button"
+            style="background-color: #4dd4ac"
+            type="submit"
+          >
+            Add Phone number
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock %}

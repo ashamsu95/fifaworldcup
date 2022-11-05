@@ -1,0 +1,29 @@
+{% extends 'base.html'%} {% load static %} {% block Body_block %}
+
+<div class="tablebox">
+  <table class="tablebox_head">
+    <tr class="tablename">
+      <th>No.</th>
+      <th>Match</th>
+      <th>Prediction</th>
+      <th>Points</th>
+    </tr>
+    <tbody class="tablebody">
+      {%for matchs in predictions %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{matchs.Fixture.match.Score}}</td>
+        {% if matchs.Fixture.userprediction == 'Home'%}
+        <td>{{matchs.Fixture.match.Home}} win</td>
+        {% elif matchs.Fixture.userprediction == 'Away' %}
+        <td>{{matchs.Fixture.match.Away}} win win</td>
+        {% else %}
+        <td>{{matchs.Fixture.userprediction}}</td>
+        {% endif %}
+        <td>{{matchs.point}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

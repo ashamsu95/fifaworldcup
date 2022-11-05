@@ -1,0 +1,71 @@
+{% extends 'base.html'%} {% load static %} {% block Body_block %}
+<div class="user_infocard">
+  {% for message in messages %}
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div
+      class="toast show"
+      id="mytost"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-header">
+        <strong class="me-auto">{{ message }}</strong>
+        <small>1sec ago</small>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="fixtures">
+  <h1>Fixtures</h1>
+
+  {% if fixtures|length > 0 %} {%for fixture in fixtures %}
+
+  <div class="fixtures_card">
+    <div class="fixture_info_card">
+      <div class="teamA teams">
+        <img src="{{fixture.homeimg}}" alt="" class="teamAimg" />
+        {{fixture.Home}}
+      </div>
+      <h1>VS</h1>
+      <div class="teamB teams">
+        <img src="{{fixture.awayimg}}" alt="" class="teamAimg" />
+        {{fixture.Away}}
+      </div>
+    </div>
+    <div class="timmer">{{fixture.matchtime}}</div>
+    <a href="{% url 'league_app:userpridction' fixture.pk %}"
+      ><button class="button2">Make prediction</button>
+    </a>
+  </div>
+  {% endfor %} {% else %}
+  <h1>fixtures for today will be live everyday at 4am</h1>
+  {% endif %}
+  <!-- <div class="fixtures_card">
+        <div class="fixture_info">
+        <div class="teamA">
+            <img src="https://crests.football-data.org/62.png" alt="" class="teamAimg">
+            <h1>Chelsea</h1>
+        </div>
+        <h1>VS</h1>
+        <div class="teamB">
+            <img src="https://crests.football-data.org/62.png" alt="" class="teamAimg">
+            <h1>Chelsea</h1>
+        </div>
+    </div>
+    <button class="button2">
+        Make prediction
+    </button>
+
+    </div> -->
+</div>
+
+{% endblock %}
