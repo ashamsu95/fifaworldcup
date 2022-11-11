@@ -32,19 +32,25 @@
   <div class="fixtures_card">
     <div class="fixture_info_card">
       <div class="teamA teams">
-        <img src="{{fixture.homeimg}}" alt="" class="teamAimg" />
-        {{fixture.Home}}
+        <img src="{{fixture.match.homeimg}}" alt="" class="teamAimg" />
+        {{fixture.match.Home}}
       </div>
       <h1>VS</h1>
       <div class="teamB teams">
-        <img src="{{fixture.awayimg}}" alt="" class="teamAimg" />
-        {{fixture.Away}}
+        <img src="{{fixture.match.awayimg}}" alt="" class="teamAimg" />
+        {{fixture.match.Away}}
       </div>
     </div>
     <div class="timmer">{{fixture.matchtime}}</div>
-    <a href="{% url 'league_app:userpridction' fixture.pk %}"
+    {% if fixture.has_predicated == True %}
+    <a href="{% url 'league_app:userpridction' fixture.match.pk %}"
+      ><button class="button2">View all prediction</button>
+    </a>
+    {% else %}
+    <a href="{% url 'league_app:userpridction' fixture.match.pk %}"
       ><button class="button2">Make prediction</button>
     </a>
+    {% endif %}
   </div>
   {% endfor %} {% else %}
   <h1>fixtures for today will be live everyday at 4am</h1>

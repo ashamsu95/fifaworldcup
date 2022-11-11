@@ -29,7 +29,8 @@ class MatchesPredictions (models.Model):
         Away = 'Away'
         draw ='draw'
         no_Prediction ='non'
-       
+        Stay_out = 'out'
+    has_predicated =  models.BooleanField(default=False)  
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     userprediction = models.CharField(max_length=30,choices=Prediction.choices,default=Prediction.no_Prediction)
 
@@ -56,12 +57,22 @@ def create_MatchesPredictions(sender,instance,created,**kwargs):
             fixture_prediction = MatchesPredictions.objects.filter(match=instance)
             for fix in fixture_prediction:
                 user_point_update=MyUser.objects.get(user=fix.user)
-                if fix.userprediction == 'non':
+                if fix.userprediction == 'non' and fix.has_predicated == False:
+                    MatchPoint.objects.create(point=0,Fixture=fix)
+                elif fix.userprediction == 'out' and fix.has_predicated == True:
                     MatchPoint.objects.create(point=1,Fixture=fix)
                     user_point_update.point = user_point_update.point +1
                     user_point_update.save()
-                elif fix.userprediction == instance.result:
+                elif fix.userprediction == instance.result and fix.has_predicated == True:
                     MatchPoint.objects.create(point=3,Fixture=fix)
-                else:
+                    user_point_update.point = user_point_update.point +3
+                    user_point_update.save()
+                elif fix.userprediction != instance.result and fix.has_predicated == True:
                     MatchPoint.objects.create(point=-1,Fixture=fix)
+                    user_point_update.point = user_point_update.point - 1
+                    user_point_update.save()
+                
+
+
+
                     

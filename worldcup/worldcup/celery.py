@@ -27,17 +27,17 @@ app.conf.beat_schedule = {
     'get_EPLfixtures_at_3am': {
         'task': 'league.task.Epl_today_fixtures',
         'schedule': crontab(hour=4, minute=00, day_of_month="6-14", month_of_year=11),
-        'args': (str(timezone.localtime(timezone.now()).date()),'PL')
+        'args': ('PL',)
     },
     'get_WCfixturesnov_at_4am': {
         'task': 'league.task.Epl_today_fixtures',
         'schedule': crontab(hour=4, minute=00, day_of_month="18-30", month_of_year=11),
-        'args': (str(timezone.localtime(timezone.now()).date()),'WC')
+        'args': ('WC',)
     },
     'get_WCfixturesdec_at_4am': {
         'task': 'league.task.Epl_today_fixtures',
         'schedule': crontab(hour=4, minute=00, day_of_month="1-18", month_of_year=12),
-        'args': (str(timezone.localtime(timezone.now()).date()),'WC')
+        'args': ('WC',)
     },
     'pointreset_at_18nov': {
         'task': 'league.task.point_reset',

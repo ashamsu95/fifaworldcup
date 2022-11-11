@@ -1,0 +1,44 @@
+{% extends 'base.html'%} {% load static %} {% block Body_block %}
+<div class="fixtures">
+  <div class="fixtures_card">
+    <div class="fixture_info">
+      <div class="teamA">
+        <img src="{{fixture.homeimg}}" alt="" class="teamAimg" />
+        <p>{{fixture.Home}}</p>
+      </div>
+      <h1>VS</h1>
+      <div class="teamB">
+        <img src="{{fixture.awayimg}}" alt="" class="teamAimg" />
+        <p>{{fixture.Away}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tablebox">
+    <table class="tablebox_head">
+      <tr class="tablename">
+        <th>No.</th>
+        <th>User</th>
+        <th>Predction</th>
+      </tr>
+      <tbody class="tablebody">
+        {%for u in othersprediction %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{u.user.username}}</td>
+          {% if u.userprediction == "non" %}
+          <td>not predicted</td>
+          {% elif u.userprediction == "Home" %}
+          <td>{{fixture.Home}} wins</td>
+          {% elif u.userprediction == "Away" %}
+          <td>{{fixture.Away}} wins</td>
+          {% elif u.userprediction == "draw" %}
+          <td>Draw</td>
+          {% elif u.userprediction == "out"%} staying out {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}
+</div>

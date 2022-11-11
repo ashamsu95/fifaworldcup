@@ -1,0 +1,27 @@
+<body>
+  <p>{{fixture.Home}} vs {{fixture.Away}}</p>
+  <table>
+    <tr class="tablename">
+      <th>No.</th>
+      <th>User</th>
+      <th>Predction</th>
+    </tr>
+    <tbody class="tablebody">
+      {%for u in othersprediction %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{u.user.username}}</td>
+        {% if u.userprediction == "non" %}
+        <td>not predicted</td>
+        {% elif u.userprediction == "Home" %}
+        <td>{{fixture.Home}} wins</td>
+        {% elif u.userprediction == "Away" %}
+        <td>{{fixture.Away}} wins</td>
+        {% elif u.userprediction == "draw" %}
+        <td>Draw</td>
+        {% elif u.userprediction == "out"%} staying out {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>

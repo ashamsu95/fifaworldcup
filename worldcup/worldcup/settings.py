@@ -24,7 +24,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR,'Template')
 SECRET_KEY = 'django-insecure-33&ap*=#*yytn_-bzk3^_=$o0$%c!0uju%0lgy)kgfhfk4x)v)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -152,4 +152,13 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
-#pwa settings
+#email settings
+# SMTP Settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER ='ashamsunepal@gmail.com'
+EMAIL_HOST_PASSWORD = "yhvtqehlhfbnfetv"
+DEFAULT_FROM_EMAIL = 'Test <fifadev@gmail.com>'
+

@@ -4,6 +4,13 @@ from celery.schedules import crontab
 from celery import shared_task
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
 
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+from worldcup import settings  #type:ignore
+from django.core.mail import EmailMessage
+
 
 import json
 from types import SimpleNamespace
@@ -14,7 +21,7 @@ import zoneinfo
 from datetime import timedelta
 
 import random
-from .models import Fixture
+from .models import Fixture,MatchesPredictions
 
 from user.models import MyUser
 
@@ -75,11 +82,14 @@ def point_reset(self):
     return "poin reset"
 
 @shared_task(bind=True)
-def Epl_today_fixtures(self,date,comp):
+def Epl_today_fixtures(self,comp):
+    nowtimes = requests.get("http://worldtimeapi.org/api/timezone/Asia/Kathmandu",)
+    toadys_date = nowtimes.json()["datetime"][0:10]
+    
     Epl_Url = 'https://api.football-data.org/v4/competitions/'+str(comp)+'/matches'
     body={
-        'dateFrom':date,
-        'dateTo':date,
+        'dateFrom':toadys_date,
+        'dateTo':toadys_date,
         }
     response = requests.get(Epl_Url, headers=headers,params=body)
     in_data = response.json()["matches"]
@@ -98,10 +108,12 @@ def Epl_today_fixtures(self,date,comp):
             awayimg= matches["awayTeam"]["img"],
             matchtime= convert_to_localtime(matches["utcDate"]),
         )
+        matchtime= convert_to_localtime(matches["utcDate"])
         matchends = convert_to_localtime(matches["utcDate"])+ timedelta(hours=2,minutes=1)
         schedule, created = CrontabSchedule.objects.get_or_create(hour = matchends.hour, minute = matchends.minute, month_of_year =matchends.month, day_of_month=matchends.day)
         task = PeriodicTask.objects.create(crontab=schedule, name=matches["homeTeam"]["name"]+" vs " +matches["awayTeam"]["name"] , task='league.task.Fixtures_stats',args =json.dumps([matches["id"],]))
-
+        scheduleemail, createdemail = CrontabSchedule.objects.get_or_create(hour = matchtime.hour, minute = matchtime.minute, month_of_year =matchtime.month, day_of_month=matchtime.day)
+        taskemail = PeriodicTask.objects.create(crontab=scheduleemail, name=matches["homeTeam"]["name"]+" vs " +matches["awayTeam"]["name"] +"email send", task='league.task.send_mail_func',args =json.dumps([matches["id"],]))
 
     return "Done"
 
@@ -134,3 +146,21 @@ def Fixtures_stats(self,matchid):
 
 
 
+@shared_task(bind=True)
+def send_mail_func(self,matchid):
+    users = get_user_model().objects.all()
+    thisfixture = Fixture.objects.get(matchid=matchid)
+    othersprediction = MatchesPredictions.objects.filter(match=thisfixture.id)
+    html_template = 'league/emailtemp.html'
+    context = {'othersprediction':othersprediction,'fixture':thisfixture}
+    html_message = render_to_string(html_template, context)
+    fromemail='fifaldev@gmail.com'
+    for user in users:
+       mail_subject = "Users fixtures Predictions"
+       to_email = user.email
+       message = EmailMessage(mail_subject, html_message,fromemail,[to_email])
+       message.content_subtype = 'html' # this is required because there is no plain text email message
+       message.send()
+    return "Done"
+
+    

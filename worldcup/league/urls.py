@@ -6,5 +6,6 @@ urlpatterns = [
         path('fixtures',views.fixtures,name='fixtures'),
         path('leaguetable',views.tableview,name='leaguetable'),
         path('userspridctions/<int:pk>',views.Predictions,name='userpridction'),
-        path('PastPredictions',views.PastPredictions,name='PastPredictions')
+        path('PastPredictions',views.PastPredictions,name='PastPredictions'),
+        
 ]

@@ -10,7 +10,7 @@ from user.models import MyUser
 
 from django.utils import timezone
 
-from .task import Epl_today_fixtures,Fixtures_stats,point_reset,winner_point
+from .task import Epl_today_fixtures,Fixtures_stats,point_reset,winner_point,send_mail_func
 
 
 def fixtures(request):
@@ -22,9 +22,9 @@ def fixtures(request):
 
 @login_required
 def fixtures2(request):
-    
-    fixtures = Fixture.objects.filter(fulltime=False,matchtime__gt=timezone.localtime(timezone.now()))
-    winner_point.delay()  # type: ignore
+    print(request.build_absolute_uri )
+    fixtures = MatchesPredictions.objects.filter(user=request.user,match__fulltime=False,match__matchtime__gt=timezone.localtime(timezone.now()))
+    # fixtures = Fixture.objects.filter(fulltime=False,matchtime__gt=timezone.localtime(timezone.now()))
     username = MyUser.objects.get(user=request.user)
     context = {'fixtures':fixtures,
                     'user':username
@@ -43,13 +43,12 @@ def Predictions(request,pk):
 
 @login_required
 def Predictions2(request,pk):
-    if MatchesPredictions.objects.filter(user=request.user,match=pk,).exists():
-        fixture = MatchesPredictions.objects.get(user=request.user,match=pk,)
-        # print (fixture.match.matchtime)
-        
+    if MatchesPredictions.objects.filter(user=request.user,match=pk,has_predicated=False).exists():
+        fixture = MatchesPredictions.objects.get(user=request.user,match=pk,has_predicated=False)
         if request.method == 'GET':
             if fixture.match.matchtime >= timezone.localtime(timezone.now()):  # type: ignore
-                context = {'fixture' : fixture}
+                othersprediction = MatchesPredictions.objects.filter(match=pk)
+                context = {'fixture' : fixture,'othersprediction':othersprediction}
                 return render(request,'league/fixturePredictions.html',context)
             else:
                 messages.error(request,"Prediction time's up")
@@ -59,12 +58,18 @@ def Predictions2(request,pk):
             if fixture.match.matchtime >= timezone.localtime(timezone.now()):  # type: ignore
                 pridction = request.POST.get('selector')
                 fixture.userprediction = pridction
+                fixture.has_predicated =  True
                 fixture.save()
                 messages.error(request,'Prediction Saved')
                 return redirect('/authuser/fixtures')
             else:
                 messages.error(request,"Prediction time's up")
                 return redirect('/authuser/fixtures')
+    elif MatchesPredictions.objects.filter(user=request.user,match=pk,has_predicated=True).exists():
+        othersprediction = MatchesPredictions.objects.filter(match=pk)
+        thisfixture = Fixture.objects.get(id=pk)
+        context = {'othersprediction':othersprediction,'fixture':thisfixture}
+        return render(request,'league/othersPredictions.html',context)
     else:
         messages.error(request,"Sorry you're not registered for this matchday ")
         return redirect('/authuser/fixtures')
