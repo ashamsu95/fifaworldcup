@@ -13,7 +13,7 @@ from . import forms
 from user.models import MyUser,addduser_number
 
 def addnumber(request):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         form = forms.phone(request.POST or None)
         context = {
          'form': form

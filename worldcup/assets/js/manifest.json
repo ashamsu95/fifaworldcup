@@ -3,8 +3,8 @@
   "short_name": "WC2022",
   "theme_color": "#cfd4e8",
   "background_color": "#e8e8e8",
-  "display": "fullscreen",
-  "scope": "/authuser/fixtures",
+  "display": "standalone",
+  "scope": "/",
   "start_url": "/authuser/fixtures",
 
   "icons": [

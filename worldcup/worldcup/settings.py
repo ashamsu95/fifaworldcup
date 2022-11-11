@@ -24,7 +24,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR,'Template')
 SECRET_KEY = 'django-insecure-33&ap*=#*yytn_-bzk3^_=$o0$%c!0uju%0lgy)kgfhfk4x)v)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -132,7 +132,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "assets",
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'core/static/')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
