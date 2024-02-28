@@ -1,7 +1,7 @@
 Project Title: FIFA World Prediction League
 
 Description:
-Our project, built using Django Python, is a Progressive Web App (PWA) designed to create an engaging prediction league for FIFA World matches. The primary goal was to provide users with a platform to join a league, predict match outcomes, and compete for the top spot.
+The project, built using Django Python, is a Progressive Web App (PWA) designed to create an engaging prediction league for FIFA World matches. The primary goal was to provide users with a platform to join a league, predict match outcomes, and compete for the top spot.
 
 Key Features:
 
